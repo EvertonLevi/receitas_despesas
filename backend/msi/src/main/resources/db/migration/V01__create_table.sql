@@ -1,6 +1,22 @@
-CREATE TABLE employee(
-    id BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(30) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL
+CREATE TABLE conta(
+    id INT(5) PRIMARY KEY AUTO_INCREMENT, 
+    descricao VARCHAR(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE lancamento(
+    id INT(5) PRIMARY KEY AUTO_INCREMENT,
+    dataLancamento DATETIME DEFAULT CURRENT_TIMESTAMP,
+    idConta INT(5) NOT NULL,
+    FOREIGN KEY (idConta) REFERENCES conta (id),
+    descricao VARCHAR(255) NOT NULL,
+    valor FLOAT(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE usuario(
+    id INT(5) PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    senha VARCHAR(50) NOT NULL,
+    idLancamento INT(5) NOT NULL,
+    FOREIGN KEY (idLancamento) REFERENCES lancamento (id),
+    idConta INT(5),
+    CONSTRAINT fk_ContaUsuario FOREIGN KEY (idConta) REFERENCES conta (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
