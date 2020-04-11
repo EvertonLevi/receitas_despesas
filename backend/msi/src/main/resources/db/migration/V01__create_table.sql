@@ -5,9 +5,9 @@ CREATE TABLE conta(
 CREATE TABLE lancamento(
     id INT(5) PRIMARY KEY AUTO_INCREMENT,
     dataLancamento DATETIME DEFAULT CURRENT_TIMESTAMP,
-    idConta INT(5) NOT NULL,
-    FOREIGN KEY (idConta) REFERENCES conta (id),
-    descricao VARCHAR(255) NOT NULL,
+    idContaLancamento INT(5) NOT NULL,
+    FOREIGN KEY (idContaLancamento) REFERENCES conta (id),
+    descricao VARCHAR(255),
     valor FLOAT(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE usuario(
@@ -15,8 +15,8 @@ CREATE TABLE usuario(
     nome VARCHAR(30) NOT NULL,
     email VARCHAR(50) NOT NULL,
     senha VARCHAR(50) NOT NULL,
-    idLancamento INT(5) NOT NULL,
-    FOREIGN KEY (idLancamento) REFERENCES lancamento (id),
-    idConta INT(5),
-    CONSTRAINT fk_ContaUsuario FOREIGN KEY (idConta) REFERENCES conta (id)
+    idLancamentoUsuario INT(5),
+    FOREIGN KEY (idLancamentoUsuario) REFERENCES lancamento (id),
+    idContaUsuario INT(5),
+    FOREIGN KEY (idContaUsuario) REFERENCES conta (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
