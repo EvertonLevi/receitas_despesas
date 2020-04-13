@@ -3,17 +3,18 @@ package com.webservice.msi.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.Id; 
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import java.util.List;
 
 @Entity
 @Table(name = "usuario")
@@ -22,59 +23,78 @@ public class UsuarioEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
-  private int id;
+  private Long id;
 
   @NotNull
   @Size(max = 30)
   @Column
   private String nome;
-  
+
   @NotNull
   @NotBlank(message = "Por favor, insira um e-mail")
   @Size(max = 50)
   @Column
   private String email;
-  
+
   @NotNull
   @Size(max = 50)
   @Column
   private String senha;
+
+
+
   
-  @ManyToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "lancamento_idlancamento", referencedColumnName = "id")
-  private LancamentoEntity lancamento_idlancamento;
-  
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "conta_idconta", referencedColumnName = "id")
+  @Column
+  @OneToMany(
+  mappedBy = "usuarioEntity", 
+  cascade = CascadeType.ALL)
+  private List<LancamentoEntity> lancamento;
+
+
+
+
+
+
+
+
+
+
+
+
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuarioEntity")
   private ContaEntity conta_idconta;
 
   public UsuarioEntity() {
 
   }
 
-  public UsuarioEntity(int id, String nome, String email) {
+  public UsuarioEntity(Long id, String nome, String email) {
     this.id = id;
     this.nome = nome;
     this.email = email;
   }
 
-  public UsuarioEntity(int id, String nome, 
-  String email, String senha,
-   LancamentoEntity lancamento_idlancamento,
-    ContaEntity conta_idconta) {
+  // public UsuarioEntity(Long id, String nome, String email, ContaEntity
+  // conta_idconta) {
+  // this.id = id;
+  // this.nome = nome;
+  // this.email = email;
+  // this.conta_idconta = conta_idconta;
+  // }
+
+  public UsuarioEntity(Long id, String nome, String email, String senha, ContaEntity conta_idconta) {
     this.id = id;
     this.nome = nome;
     this.email = email;
     this.senha = senha;
-    this.lancamento_idlancamento = lancamento_idlancamento;
     this.conta_idconta = conta_idconta;
   }
 
-  public int getId() {
+  public Long getId() {
     return this.id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
@@ -102,12 +122,12 @@ public class UsuarioEntity {
     this.senha = senha;
   }
 
-  public LancamentoEntity getIdLancamentoUsuario() {
-    return this.lancamento_idlancamento;
+  public List<LancamentoEntity> getIdLancamentoUsuario() {
+    return this.lancamento;
   }
 
-  public void setIdLancamentoUsuario(LancamentoEntity lancamento_idlancamento) {
-    this.lancamento_idlancamento = lancamento_idlancamento;
+  public void setIdLancamentoUsuario(List<LancamentoEntity> lancamento) {
+    this.lancamento = lancamento;
   }
 
   public ContaEntity getIdContaUsuario() {

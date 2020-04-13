@@ -7,7 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MsiApplication {
 
     public static void main(final String[] args) {
-        // start na aplicaçao
         SpringApplication.run(MsiApplication.class, args);
     }
 }

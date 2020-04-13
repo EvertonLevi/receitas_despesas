@@ -2,9 +2,12 @@ package com.webservice.msi.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -14,26 +17,31 @@ public class ContaEntity {
 
  @Id
  @GeneratedValue(strategy = GenerationType.IDENTITY)
- @Column
- private int id;
+ private Long id;
 
  @Size(max = 255)
  @Column
  private String descricao;
 
+ @OneToOne(fetch = FetchType.LAZY,
+ optional = false)
+ @JoinColumn(name = "id", 
+ nullable = false)
+ private UsuarioEntity usuarioEntity;
+
  public ContaEntity() {
  }
 
- public ContaEntity(int id, String descricao) {
+ public ContaEntity(Long id, String descricao) {
   this.id = id;
   this.descricao = descricao;
  }
 
- public int getId() {
+ public Long getId() {
   return this.id;
  }
 
- public void setId(int id) {
+ public void setId(Long id) {
   this.id = id;
  }
 

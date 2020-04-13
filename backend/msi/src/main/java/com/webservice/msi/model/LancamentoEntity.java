@@ -2,7 +2,6 @@ package com.webservice.msi.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -21,14 +19,10 @@ public class LancamentoEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
-  private int id;
+  private Long id;
 
-  @Column
-  private LocalDateTime dataLancamento;
-
-  // @ManyToOne(cascade = CascadeType.ALL)
-  // @JoinColumn(name = "idContaLancamento", referencedColumnName = "id")
-  // private ContaEntity idContaLancamento;
+  @Column(name = "data_de_lancamento")
+  private LocalDateTime data_de_lancamento;
 
   @Column
   private String descricao;
@@ -37,41 +31,55 @@ public class LancamentoEntity {
   @Column
   private Float valor;
 
+  @ManyToOne
+  @JoinColumn(name = "usuario_id")
+  private UsuarioEntity usuarioEntity;
+
   public LancamentoEntity() {
 
   }
 
-  public LancamentoEntity(int id, LocalDateTime dataLancamento, ContaEntity idContaLancamento, String descricao,
-      Float valor) {
+  public LancamentoEntity(Long id, UsuarioEntity usuarioEntity, LocalDateTime data_de_lancamento,
+      // ContaEntity idContaLancamento,
+      String descricao, Float valor) {
     this.id = id;
-    this.dataLancamento = dataLancamento;
+    this.usuarioEntity = usuarioEntity;
+    this.data_de_lancamento = data_de_lancamento;
     // this.idContaLancamento = idContaLancamento;
     this.descricao = descricao;
     this.valor = valor;
   }
 
-  public int getId() {
+  public Long getId() {
     return this.id;
   }
 
-  public void setId(int id) {
+  public void setId(Long id) {
     this.id = id;
   }
 
-  public LocalDateTime getDatalancamento() {
-    return this.dataLancamento;
+  // public Date getDatalancamento() {
+  // return this.data_de_lancamento;
+  // }
+
+  // public void setDataLancamento(Date data_de_lancamento) {
+  // this.data_de_lancamento = data_de_lancamento;
+  // }
+
+  public UsuarioEntity getUsuarioEntity() {
+    return this.usuarioEntity;
   }
 
-  public void setDataLancamento(LocalDateTime dataLancamento) {
-    this.dataLancamento = dataLancamento;
+  public void setUsuarioEntity(UsuarioEntity usuarioEntity) {
+    this.usuarioEntity = usuarioEntity;
   }
 
   // public ContaEntity getIdContaLancamento() {
-  //   return this.idContaLancamento;
+  // return this.idContaLancamento;
   // }
 
   // public void setIdContaLancamento(ContaEntity idContaLancamento) {
-  //   this.idContaLancamento = idContaLancamento;
+  // this.idContaLancamento = idContaLancamento;
   // }
 
   public String getDescricao() {
