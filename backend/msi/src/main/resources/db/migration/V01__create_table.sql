@@ -48,8 +48,8 @@ CREATE TABLE usuario
     id BIGINT NOT NULL
     AUTO_INCREMENT,
   descricao VARCHAR
-    (255) NULL,
-  valor FLOAT NULL,
+    (255) NOT NULL,
+  valor FLOAT NOT NULL,
   data_de_lancamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   usuario_id BIGINT DEFAULT NULL,
   CONSTRAINT fk_lancamento_usuarioid

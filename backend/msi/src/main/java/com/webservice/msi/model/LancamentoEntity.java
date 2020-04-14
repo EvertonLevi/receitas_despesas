@@ -27,7 +27,6 @@ public class LancamentoEntity {
   @Column
   private String descricao;
 
-  @NotNull
   @Column
   private Float valor;
 
@@ -56,15 +55,7 @@ public class LancamentoEntity {
 
   public void setId(Long id) {
     this.id = id;
-  }
-
-  // public Date getDatalancamento() {
-  // return this.data_de_lancamento;
-  // }
-
-  // public void setDataLancamento(Date data_de_lancamento) {
-  // this.data_de_lancamento = data_de_lancamento;
-  // }
+  } 
 
   public UsuarioEntity getUsuarioEntity() {
     return this.usuarioEntity;
@@ -74,13 +65,6 @@ public class LancamentoEntity {
     this.usuarioEntity = usuarioEntity;
   }
 
-  // public ContaEntity getIdContaLancamento() {
-  // return this.idContaLancamento;
-  // }
-
-  // public void setIdContaLancamento(ContaEntity idContaLancamento) {
-  // this.idContaLancamento = idContaLancamento;
-  // }
 
   public String getDescricao() {
     return this.descricao;
@@ -96,6 +80,14 @@ public class LancamentoEntity {
 
   public void setValor(Float valor) {
     this.valor = valor;
+  }
+
+  public LocalDateTime getData_de_lancamento() {
+    return this.data_de_lancamento;
+  }
+
+  public void setData_de_lancamento(LocalDateTime data_de_lancamento) {
+    this.data_de_lancamento = data_de_lancamento;
   }
 
 }
