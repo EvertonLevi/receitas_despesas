@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id; 
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -41,31 +41,19 @@ public class UsuarioEntity {
   @Column
   private String senha;
 
+  // @Column
+  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+  private List<LancamentoEntity> lancamentos;
 
-
-  
-  @Column
-  @OneToMany(
-  mappedBy = "usuarioEntity", 
-  cascade = CascadeType.ALL)
-  private List<LancamentoEntity> lancamento;
-
-
-
-
-
-
-
-
-
-
-
-
-  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "usuarioEntity")
-  private ContaEntity conta_idconta;
+  @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private ContaEntity conta_id;
 
   public UsuarioEntity() {
 
+  }
+
+  public UsuarioEntity(LancamentoEntity lancamentoEntity) {
+    this.lancamentos.add(lancamentoEntity);
   }
 
   public UsuarioEntity(Long id, String nome, String email) {
@@ -74,20 +62,20 @@ public class UsuarioEntity {
     this.email = email;
   }
 
-  // public UsuarioEntity(Long id, String nome, String email, ContaEntity
-  // conta_idconta) {
-  // this.id = id;
-  // this.nome = nome;
-  // this.email = email;
-  // this.conta_idconta = conta_idconta;
-  // }
-
-  public UsuarioEntity(Long id, String nome, String email, String senha, ContaEntity conta_idconta) {
+  public UsuarioEntity(Long id, String nome, String email, String senha) {
     this.id = id;
     this.nome = nome;
     this.email = email;
     this.senha = senha;
-    this.conta_idconta = conta_idconta;
+  }
+
+  public UsuarioEntity(Long id, String nome, 
+  String email, String senha, ContaEntity conta_id) {
+    this.id = id;
+    this.nome = nome;
+    this.email = email;
+    this.senha = senha;
+    this.conta_id = conta_id;
   }
 
   public Long getId() {
@@ -122,20 +110,22 @@ public class UsuarioEntity {
     this.senha = senha;
   }
 
-  public List<LancamentoEntity> getIdLancamentoUsuario() {
-    return this.lancamento;
+  public List<LancamentoEntity> getIdusuario_idUsuario() {
+    return this.lancamentos;
   }
 
-  public void setIdLancamentoUsuario(List<LancamentoEntity> lancamento) {
-    this.lancamento = lancamento;
+  public void setIdusuario_idUsuario(List<LancamentoEntity> lancamentos) {
+    this.lancamentos = lancamentos;
   }
 
+  // @JsonIgnoreProperties("descricao")
   public ContaEntity getIdContaUsuario() {
-    return this.conta_idconta;
+    return this.conta_id;
   }
 
-  public void setIdContaUsuario(ContaEntity conta_idconta) {
-    this.conta_idconta = conta_idconta;
+  // @JsonIgnoreProperties("descricao")
+  public void setIdContaUsuario(ContaEntity conta_id) {
+    this.conta_id = conta_id;
   }
 
   public String toString() {

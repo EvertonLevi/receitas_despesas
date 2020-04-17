@@ -23,13 +23,16 @@ public class ContaEntity {
  @Column
  private String descricao;
 
- @OneToOne(fetch = FetchType.LAZY,
- optional = false)
- @JoinColumn(name = "id", 
- nullable = false)
- private UsuarioEntity usuarioEntity;
+ // @OneToOne(fetch = FetchType.LAZY,
+ // optional = false)
+ // @JoinColumn(name = "id", 
+ // nullable = false)
+ // private UsuarioEntity usuario;
 
  public ContaEntity() {
+ }
+ public ContaEntity(Long id) {
+  this.id = id;
  }
 
  public ContaEntity(Long id, String descricao) {

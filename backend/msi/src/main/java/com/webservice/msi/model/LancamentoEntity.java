@@ -10,10 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "lancamento")
+@JsonIgnoreProperties({ "nome", "email", "senha", "conta_idConta", "lancamento" })
 public class LancamentoEntity {
 
   @Id
@@ -26,27 +28,34 @@ public class LancamentoEntity {
 
   @Column
   private String descricao;
-
+  
   @Column
   private Float valor;
-
+  
+  // @JoinColumn(name = "usuario")
   @ManyToOne
-  @JoinColumn(name = "usuario_id")
-  private UsuarioEntity usuarioEntity;
-
+  private UsuarioEntity usuario;
+  
   public LancamentoEntity() {
-
+    
   }
+  // @JsonIgnoreProperties({ "nome", "email", "conta_idconta", "id" })
 
-  public LancamentoEntity(Long id, UsuarioEntity usuarioEntity, LocalDateTime data_de_lancamento,
-      // ContaEntity idContaLancamento,
-      String descricao, Float valor) {
+  public LancamentoEntity(Long id, UsuarioEntity usuario, LocalDateTime data_de_lancamento, String descricao,
+      Float valor) {
     this.id = id;
-    this.usuarioEntity = usuarioEntity;
+    this.usuario = usuario;
     this.data_de_lancamento = data_de_lancamento;
-    // this.idContaLancamento = idContaLancamento;
     this.descricao = descricao;
     this.valor = valor;
+  }
+
+  public UsuarioEntity getUsuarioEntity() {
+    return this.usuario;
+  }
+  
+  public void setUsuarioEntity(UsuarioEntity ue) {
+    this.usuario = ue;
   }
 
   public Long getId() {
@@ -55,16 +64,7 @@ public class LancamentoEntity {
 
   public void setId(Long id) {
     this.id = id;
-  } 
-
-  public UsuarioEntity getUsuarioEntity() {
-    return this.usuarioEntity;
   }
-
-  public void setUsuarioEntity(UsuarioEntity usuarioEntity) {
-    this.usuarioEntity = usuarioEntity;
-  }
-
 
   public String getDescricao() {
     return this.descricao;

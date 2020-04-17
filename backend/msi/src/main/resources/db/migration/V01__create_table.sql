@@ -33,8 +33,7 @@ CREATE TABLE usuario
   (50) NOT NULL,
   senha VARCHAR
   (50) NOT NULL,
-  conta_idconta BIGINT,
-  lancamento BIGINT,
+  conta_id BIGINT,
   PRIMARY KEY
   (id) 
     )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -51,17 +50,18 @@ CREATE TABLE usuario
     (255) NOT NULL,
   valor FLOAT NOT NULL,
   data_de_lancamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  usuario_id BIGINT DEFAULT NULL,
-  CONSTRAINT fk_lancamento_usuarioid
-    FOREIGN KEY
-    (usuario_id)
-    REFERENCES msi.usuario
-    (id)
-    ON
-    DELETE CASCADE
-    ON
-    UPDATE CASCADE,
-  PRIMARY KEY (id))
+  usuario BIGINT DEFAULT NULL,
+  -- CONSTRAINT fk_lancamento_usuarioid
+  --   FOREIGN KEY
+  --   (usuario_id)
+  --   REFERENCES msi.usuario
+  --   (id)
+  --   ON
+  --   DELETE CASCADE
+  --   ON
+  --   UPDATE CASCADE,
+  PRIMARY KEY (id)
+  )
 ENGINE
     =InnoDB DEFAULT CHARSET=utf8;
 
@@ -74,20 +74,19 @@ ENGINE
       AUTO_INCREMENT,
   descricao VARCHAR
       (255) NOT NULL,
-  usuarioEntity BIGINT NOT NULL, 
   PRIMARY KEY
       (id))
 ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-      ALTER TABLE conta
-  ADD CONSTRAINT fk_conta_usuario
-    FOREIGN KEY (usuarioEntity)
-    REFERENCES msi.usuario (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-ENGINE
-      =InnoDB DEFAULT CHARSET=utf8;
+--       ALTER TABLE conta
+--   ADD CONSTRAINT fk_conta_usuario
+--     FOREIGN KEY (usuario)
+--     REFERENCES msi.usuario (id)
+--     ON DELETE NO ACTION
+--     ON UPDATE NO ACTION,
+-- ENGINE
+--       =InnoDB DEFAULT CHARSET=utf8;
 
 -- SET SQL_MODE=@OLD_SQL_MODE;
 -- SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

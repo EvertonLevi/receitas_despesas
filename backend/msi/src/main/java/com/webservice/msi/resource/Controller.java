@@ -1,6 +1,8 @@
 package com.webservice.msi.resource;
 
+import java.io.Console;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -8,6 +10,9 @@ import javax.validation.Valid;
 
 import com.webservice.msi.repository.LancamentoRepository;
 import com.webservice.msi.repository.UsuarioRepository;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import com.webservice.msi.dto.ContaDTO;
+import com.webservice.msi.model.ContaEntity;
 import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
@@ -32,6 +37,9 @@ public class Controller {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepDTO;
+
+    @Autowired
     private LancamentoRepository lancamentoRepository;
 
     @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
@@ -40,12 +48,16 @@ public class Controller {
     }
 
     @PostMapping("/createUser")
-    public String createUsuario(@Valid @RequestBody UsuarioEntity usuarioEntity) {
+    public String createUsuario(@Valid @RequestBody 
+    UsuarioEntity usuarioEntity
+    ) {
+        ContaDTO contaDTO = new ContaDTO();
         UsuarioEntity entity = new UsuarioEntity();
         try {
             entity.setNome(usuarioEntity.getNome());
             entity.setEmail(usuarioEntity.getEmail());
             entity.setSenha(usuarioEntity.getSenha());
+            // entity.setIdContaUsuario(usuarioEntity.getIdContaUsuario());;
             usuarioRepository.save(entity);
 
             return entity.toString();
@@ -60,12 +72,16 @@ public class Controller {
     }
 
     @PostMapping("/postLancamento")
-    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity) {
+    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity, UsuarioEntity usuarioEntity
+
+    ) {
+
         LancamentoEntity entity = new LancamentoEntity();
         try {
             entity.setDescricao(lancamentoEntity.getDescricao());
             entity.setValor(lancamentoEntity.getValor());
             entity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
+            entity.setUsuarioEntity(lancamentoEntity.getUsuarioEntity());
 
             lancamentoRepository.save(entity);
             return entity.toString();
