@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+// @JoinColumn(name = "usuario") no Usuario Entity
 
 @Entity
 @Table(name = "lancamento")
@@ -28,18 +29,28 @@ public class LancamentoEntity {
 
   @Column
   private String descricao;
-  
+
   @Column
   private Float valor;
-  
-  // @JoinColumn(name = "usuario")
+
   @ManyToOne
   private UsuarioEntity usuario;
-  
-  public LancamentoEntity() {
-    
+
+  public UsuarioEntity getUsuarioEntity() {
+    return this.usuario;
   }
-  // @JsonIgnoreProperties({ "nome", "email", "conta_idconta", "id" })
+
+  public void setUsuarioEntity(UsuarioEntity ue) {
+    this.usuario = ue;
+  }
+
+  public LancamentoEntity(UsuarioEntity ueId) {
+    this.usuario = ueId;
+  }
+
+  public LancamentoEntity() {
+
+  }
 
   public LancamentoEntity(Long id, UsuarioEntity usuario, LocalDateTime data_de_lancamento, String descricao,
       Float valor) {
@@ -50,13 +61,7 @@ public class LancamentoEntity {
     this.valor = valor;
   }
 
-  public UsuarioEntity getUsuarioEntity() {
-    return this.usuario;
-  }
-  
-  public void setUsuarioEntity(UsuarioEntity ue) {
-    this.usuario = ue;
-  }
+  // @JsonIgnoreProperties({ "nome", "email", "conta_idconta", "id" })
 
   public Long getId() {
     return this.id;

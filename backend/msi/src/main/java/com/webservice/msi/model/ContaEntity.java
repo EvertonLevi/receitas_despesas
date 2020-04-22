@@ -1,5 +1,6 @@
 package com.webservice.msi.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,16 +21,28 @@ public class ContaEntity {
  private Long id;
 
  @Size(max = 255)
- @Column
  private String descricao;
 
- // @OneToOne(fetch = FetchType.LAZY,
- // optional = false)
- // @JoinColumn(name = "id", 
- // nullable = false)
- // private UsuarioEntity usuario;
+ @OneToOne(mappedBy = "conta_id",
+ cascade = CascadeType.ALL,
+  fetch = FetchType.LAZY,
+  optional = false )
+ private UsuarioEntity usuarioEntity;
 
+ public void setUsuario(
+  UsuarioEntity usuarioEntity){
+   if (usuarioEntity == null) {
+    if (this.usuarioEntity != null) {
+     this.usuarioEntity.setIdContaUsuario(null);
+    }
+   } else {
+    usuarioEntity.setIdContaUsuario(this);
+   }
+   this.usuarioEntity = usuarioEntity;
+ }
+ 
  public ContaEntity() {
+
  }
  public ContaEntity(Long id) {
   this.id = id;

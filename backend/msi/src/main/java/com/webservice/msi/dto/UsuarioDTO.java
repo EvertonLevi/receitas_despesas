@@ -1,24 +1,23 @@
 package com.webservice.msi.dto;
 
-import com.webservice.msi.model.LancamentoEntity;
+import java.util.stream.Collectors;
+
 import com.webservice.msi.model.UsuarioEntity;
 
+import antlr.collections.List;
+
 public class UsuarioDTO {
- private Long usuario_id;
+ private Long id;
 
- public UsuarioDTO(LancamentoEntity ue) {
-  this.usuario_id = ue.getUsuarioEntity().getId();
+ public UsuarioDTO(UsuarioEntity usuarioEntity) {
+  this.id = usuarioEntity.getId();
  }
 
- // public UsuarioEntity transformObj() {
- //  return new UsuarioEntity(usuario_id);
+ public UsuarioEntity transformObj() {
+  return new UsuarioEntity(id);
+ }
+
+ // public static java.util.List<UsuarioDTO> converter(java.util.List<UsuarioEntity> usuarList) {
+ //  return usuarList.stream().map(UsuarioDTO::new).collect(Collectors.toList());
  // }
-
- public Long getUsuario_id() {
-  return this.usuario_id;
- }
-
- public void setUsuario_id(Long usuario_id) {
-  this.usuario_id = usuario_id;
- }
 }

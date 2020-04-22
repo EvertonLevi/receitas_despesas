@@ -7,11 +7,15 @@ import java.util.Optional;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
+import com.webservice.msi.repository.ContaRepository;
 import com.webservice.msi.repository.LancamentoRepository;
 import com.webservice.msi.repository.UsuarioRepository;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.webservice.msi.dto.ContaDTO;
+
+import com.webservice.msi.dto.UsuarioDTO;
 import com.webservice.msi.model.ContaEntity;
 import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
@@ -37,7 +41,7 @@ public class Controller {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepDTO;
+    private ContaRepository contaRepository;
 
     @Autowired
     private LancamentoRepository lancamentoRepository;
@@ -48,19 +52,13 @@ public class Controller {
     }
 
     @PostMapping("/createUser")
-    public String createUsuario(@Valid @RequestBody 
-    UsuarioEntity usuarioEntity
-    ) {
-        ContaDTO contaDTO = new ContaDTO();
-        UsuarioEntity entity = new UsuarioEntity();
+    public String createUsuario(@Valid @RequestBody
+    UsuarioEntity usuarioEntity, ContaEntity contaEntity) {
         try {
-            entity.setNome(usuarioEntity.getNome());
-            entity.setEmail(usuarioEntity.getEmail());
-            entity.setSenha(usuarioEntity.getSenha());
-            // entity.setIdContaUsuario(usuarioEntity.getIdContaUsuario());;
-            usuarioRepository.save(entity);
+            usuarioRepository.save(usuarioEntity);
+            // contaRepository.save(contaEntity);
 
-            return entity.toString();
+            return usuarioEntity.toString();
         } catch (Exception e) {
             return "Erro no CreateUser: " + e.getMessage();
         }
@@ -72,16 +70,13 @@ public class Controller {
     }
 
     @PostMapping("/postLancamento")
-    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity, UsuarioEntity usuarioEntity
-
-    ) {
-
+    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity, UsuarioDTO usuarioDTO) {
         LancamentoEntity entity = new LancamentoEntity();
         try {
             entity.setDescricao(lancamentoEntity.getDescricao());
             entity.setValor(lancamentoEntity.getValor());
             entity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
-            entity.setUsuarioEntity(lancamentoEntity.getUsuarioEntity());
+            entity.setUsuarioEntity(usuarioDTO.transformObj());
 
             lancamentoRepository.save(entity);
             return entity.toString();
@@ -93,6 +88,20 @@ public class Controller {
     @DeleteMapping("/deleteLancamento/{id}")
     public void deleteLancamento(@PathVariable Long id) {
         lancamentoRepository.deleteById(id);
+    }
+
+    @PostMapping("/createConta")
+    public String createConta(@Valid @RequestBody ContaEntity contaEntity, UsuarioEntity usuarioEntity) {
+        LancamentoEntity entity = new LancamentoEntity();
+        try {
+            // entity.setDescricao(lancamentoEntity.getDescricao());
+            // entity.setValor(lancamentoEntity.getValor());
+
+            // lancamentoRepository.save(entity);
+            return entity.toString();
+        } catch (Exception e) {
+            return "Erro no método createConta(): " + e.getMessage();
+        }
     }
 
     @GetMapping
