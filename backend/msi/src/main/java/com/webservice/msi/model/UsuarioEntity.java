@@ -8,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -16,73 +15,69 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.io.Serializable;
 import java.util.List;
-
 
 @Entity
 @Table(name = "usuario")
-public class UsuarioEntity {
+public class UsuarioEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column
   private Long id;
 
   @NotNull
   @Size(max = 30)
-  @Column
   private String nome;
 
   @NotNull
   @NotBlank(message = "Por favor, insira um e-mail")
   @Size(max = 50)
-  @Column
   private String email;
 
   @NotNull
   @Size(max = 50)
-  @Column
   private String senha;
 
-  // @MapsId("id")
-  @JoinColumn(name = "conta_id")
-  @OneToOne(fetch = FetchType.LAZY)
-  private ContaEntity conta_id;
 
-  
-  @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+
+
+
+
+
+  // @JoinColumn(name = "conta_id", nullable = false)
+  @OneToOne(fetch = FetchType.LAZY, 
+  optional = false)
+  private ContaEntity conta;
+
+  public UsuarioEntity(
+    // Long id, 
+  String nome, 
+  String email, String senha,
+  ContaEntity contaEntity) {
+    // this.id = id;
+    this.nome = nome;
+    this.email = email;
+    this.senha = senha;
+    this.conta  = contaEntity;
+  }
+
+
+
+
+
+
+
+  @OneToMany(
+    // mappedBy = "usuario",
+     cascade = CascadeType.ALL)
   private List<LancamentoEntity> lancamentos;
 
   public UsuarioEntity() {
 
   }
 
-  public UsuarioEntity(Long id) {
-    this.conta_id.setId(id);
-  }
 
-  public UsuarioEntity(LancamentoEntity lancamentoEntity) {
-    this.lancamentos.add(lancamentoEntity);
-  }
-
-  public UsuarioEntity(Long id, String nome, String email, String senha) {
-    this.id = id;
-    this.nome = nome;
-    this.email = email;
-    this.senha = senha;
-  }
-
-  public UsuarioEntity(Long id, String nome, String email, String senha, ContaEntity conta_id) {
-    this.id = id;
-    this.nome = nome;
-    this.email = email;
-    this.senha = senha;
-    this.conta_id = conta_id;
-  }
-
-  public UsuarioEntity(ContaEntity contaEntity) {
-    this.conta_id = contaEntity;
-  }
 
   public Long getId() {
     return this.id;
@@ -125,11 +120,11 @@ public class UsuarioEntity {
   }
 
   public ContaEntity getIdContaUsuario() {
-    return this.conta_id;
+    return this.conta;
   }
 
-  public void setIdContaUsuario(ContaEntity contaEntity){ 
-    this.conta_id  = contaEntity;
+  public void setIdContaUsuario(ContaEntity contaEntity) {
+    this.conta = contaEntity;
   }
 
   public String toString() {

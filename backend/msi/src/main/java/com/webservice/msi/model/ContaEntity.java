@@ -1,5 +1,7 @@
 package com.webservice.msi.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,58 +16,70 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "conta")
-public class ContaEntity {
+public class ContaEntity implements Serializable {
 
- @Id
- @GeneratedValue(strategy = GenerationType.IDENTITY)
- private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
- @Size(max = 255)
- private String descricao;
-
- @OneToOne(mappedBy = "conta_id",
- cascade = CascadeType.ALL,
-  fetch = FetchType.LAZY,
-  optional = false )
- private UsuarioEntity usuarioEntity;
-
- public void setUsuario(
-  UsuarioEntity usuarioEntity){
-   if (usuarioEntity == null) {
-    if (this.usuarioEntity != null) {
-     this.usuarioEntity.setIdContaUsuario(null);
-    }
-   } else {
-    usuarioEntity.setIdContaUsuario(this);
-   }
-   this.usuarioEntity = usuarioEntity;
- }
+  @Size(max = 255)
+  private String descricao;
  
- public ContaEntity() {
 
- }
- public ContaEntity(Long id) {
-  this.id = id;
- }
 
- public ContaEntity(Long id, String descricao) {
-  this.id = id;
-  this.descricao = descricao;
- }
 
- public Long getId() {
-  return this.id;
- }
 
- public void setId(Long id) {
-  this.id = id;
- }
+  @OneToOne(
+   mappedBy = "conta",  
+   cascade = CascadeType.ALL, 
+  fetch = FetchType.LAZY
+  , optional = false
+  )
+  private UsuarioEntity usuarioEntity;
 
- public String getDescricao() {
-  return this.descricao;
- }
 
- public void setDescricao(String descricao) {
-  this.descricao = descricao;
- }
+
+
+  // public void setUsuario(UsuarioEntity usuarioEntity) {
+  // if (usuarioEntity == null) {
+  // if (this.usuarioEntity != null) {
+  // this.usuarioEntity.setIdContaUsuario(null);
+  // }
+  // } else {
+  // usuarioEntity.setIdContaUsuario(this);
+  // }
+  // this.usuarioEntity = usuarioEntity;
+  // }
+
+  public ContaEntity() {
+
+  }
+
+  public ContaEntity(Long id, String descricao) {
+    this.id = id;
+    this.descricao = descricao;
+  }
+
+  public Long getId() {
+    return this.id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getDescricao() {
+    return this.descricao;
+  }
+
+  public void setDescricao(String descricao) {
+    this.descricao = descricao;
+  }
+
+  public UsuarioEntity getUsuarioEntity(){
+    return this.usuarioEntity;
+  }
+  public void setUsuarioEntity(UsuarioEntity usuarioEntity){
+    this.usuarioEntity = usuarioEntity;
+  }
 }

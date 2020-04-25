@@ -15,8 +15,7 @@ import com.webservice.msi.repository.UsuarioRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import com.webservice.msi.dto.UsuarioDTO;
-import com.webservice.msi.model.ContaEntity;
+ import com.webservice.msi.model.ContaEntity;
 import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
@@ -52,11 +51,13 @@ public class Controller {
     }
 
     @PostMapping("/createUser")
-    public String createUsuario(@Valid @RequestBody
+    public String createUsuario(@Valid @RequestBody 
     UsuarioEntity usuarioEntity, ContaEntity contaEntity) {
         try {
+            contaEntity = new ContaEntity(contaEntity.getId(), "Descrição default da conta");
+            contaRepository.save(contaEntity);
+            usuarioEntity.setIdContaUsuario(contaEntity);
             usuarioRepository.save(usuarioEntity);
-            // contaRepository.save(contaEntity);
 
             return usuarioEntity.toString();
         } catch (Exception e) {
@@ -70,14 +71,13 @@ public class Controller {
     }
 
     @PostMapping("/postLancamento")
-    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity, UsuarioDTO usuarioDTO) {
+    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity) {
         LancamentoEntity entity = new LancamentoEntity();
         try {
             entity.setDescricao(lancamentoEntity.getDescricao());
             entity.setValor(lancamentoEntity.getValor());
             entity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
-            entity.setUsuarioEntity(usuarioDTO.transformObj());
-
+ 
             lancamentoRepository.save(entity);
             return entity.toString();
         } catch (Exception e) {

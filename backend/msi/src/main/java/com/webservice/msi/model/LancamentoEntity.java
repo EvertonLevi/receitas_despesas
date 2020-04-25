@@ -1,5 +1,6 @@
 package com.webservice.msi.model;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -14,10 +15,15 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 // @JoinColumn(name = "usuario") no Usuario Entity
 
+
+// ManyToOne
+// https://thoughts-on-java.org/many-relationships-additional-properties/
+
+
 @Entity
 @Table(name = "lancamento")
 @JsonIgnoreProperties({ "nome", "email", "senha", "conta_idConta", "lancamento" })
-public class LancamentoEntity {
+public class LancamentoEntity implements Serializable{ 
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
