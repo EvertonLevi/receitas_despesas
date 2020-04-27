@@ -4,6 +4,10 @@ import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -15,10 +19,11 @@ import com.webservice.msi.repository.UsuarioRepository;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
- import com.webservice.msi.model.ContaEntity;
+import com.webservice.msi.model.ContaEntity;
 import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
+import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +35,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javassist.NotFoundException;
 
 // @CrossOrigin quando for usar o front
 // @CrossOrigin(origins = "*", allowCredentials = "*")
@@ -51,8 +58,7 @@ public class Controller {
     }
 
     @PostMapping("/createUser")
-    public String createUsuario(@Valid @RequestBody 
-    UsuarioEntity usuarioEntity, ContaEntity contaEntity) {
+    public String createUsuario(@Valid @RequestBody UsuarioEntity usuarioEntity, ContaEntity contaEntity) {
         try {
             contaEntity = new ContaEntity(contaEntity.getId(), "Descrição default da conta");
             contaRepository.save(contaEntity);
@@ -70,17 +76,28 @@ public class Controller {
         usuarioRepository.deleteById(id);
     }
 
-    @PostMapping("/postLancamento")
-    public String postLancamento(@Valid @RequestBody LancamentoEntity lancamentoEntity) {
-        LancamentoEntity entity = new LancamentoEntity();
+    // @PostMapping("/postLancamento/{id}")
+    // public String postLancamento(@Valid @RequestBody
+    // @PathVariable Long id,
+    // LancamentoEntity lancamentoEntity,
+    // UsuarioEntity usuarioEntity) {
+
+    @PostMapping("/postLancamento/{id}")
+    public String postLancamento(@PathVariable Long id, @Valid @RequestBody LancamentoEntity lancamentoEntity,
+            UsuarioEntity usuarioEntity) {
         try {
-            entity.setDescricao(lancamentoEntity.getDescricao());
-            entity.setValor(lancamentoEntity.getValor());
-            entity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
- 
-            lancamentoRepository.save(entity);
-            return entity.toString();
-        } catch (Exception e) {
+            usuarioEntity.setId(id);
+            usuarioEntity.getId();
+            usuarioRepository.save(usuarioEntity);
+            lancamentoEntity.setUsuarioEntity(usuarioEntity);
+            // lancamentoEntity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
+            // lancamentoEntity.setDescricao(lancamentoEntity.getDescricao());
+            // lancamentoEntity.setValor(lancamentoEntity.getValor());
+            lancamentoRepository.save(lancamentoEntity);
+            return usuarioEntity.toString();
+        } catch (
+
+        Exception e) {
             return "Erro no método postLancamento(): " + e.getMessage();
         }
     }

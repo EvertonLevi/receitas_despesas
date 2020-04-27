@@ -3,6 +3,7 @@ package com.webservice.msi.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,15 +16,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 // @JoinColumn(name = "usuario") no Usuario Entity
 
-
 // ManyToOne
 // https://thoughts-on-java.org/many-relationships-additional-properties/
 
-
+// @JsonIgnoreProperties({ "nome", "email", "senha", "conta_idConta", "lancamento" })
 @Entity
 @Table(name = "lancamento")
-@JsonIgnoreProperties({ "nome", "email", "senha", "conta_idConta", "lancamento" })
-public class LancamentoEntity implements Serializable{ 
+public class LancamentoEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,11 +38,25 @@ public class LancamentoEntity implements Serializable{
   @Column
   private Float valor;
 
-  @ManyToOne
+  @ManyToOne(cascade =  CascadeType.ALL)
+  @JoinColumn(name = "usuario", insertable = false, updatable = false)
   private UsuarioEntity usuario;
 
+  public LancamentoEntity() {
+
+  }
+
+  public LancamentoEntity(  UsuarioEntity usuario, 
+  LocalDateTime data_de_lancamento, 
+  String descricao, Float valor) { 
+    this.usuario = usuario;
+    this.data_de_lancamento = data_de_lancamento;
+    this.descricao = descricao;
+    this.valor = valor;
+  }
+
   public UsuarioEntity getUsuarioEntity() {
-    return this.usuario;
+    return usuario;
   }
 
   public void setUsuarioEntity(UsuarioEntity ue) {
@@ -52,19 +65,6 @@ public class LancamentoEntity implements Serializable{
 
   public LancamentoEntity(UsuarioEntity ueId) {
     this.usuario = ueId;
-  }
-
-  public LancamentoEntity() {
-
-  }
-
-  public LancamentoEntity(Long id, UsuarioEntity usuario, LocalDateTime data_de_lancamento, String descricao,
-      Float valor) {
-    this.id = id;
-    this.usuario = usuario;
-    this.data_de_lancamento = data_de_lancamento;
-    this.descricao = descricao;
-    this.valor = valor;
   }
 
   // @JsonIgnoreProperties({ "nome", "email", "conta_idconta", "id" })

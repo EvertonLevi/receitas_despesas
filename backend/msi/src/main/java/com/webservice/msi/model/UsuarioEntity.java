@@ -16,6 +16,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.List;
 
 @Entity
@@ -39,45 +42,39 @@ public class UsuarioEntity implements Serializable {
   @Size(max = 50)
   private String senha;
 
-
-
-
-
-
-
   // @JoinColumn(name = "conta_id", nullable = false)
-  @OneToOne(fetch = FetchType.LAZY, 
-  optional = false)
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
   private ContaEntity conta;
 
-  public UsuarioEntity(
-    // Long id, 
-  String nome, 
-  String email, String senha,
-  ContaEntity contaEntity) {
-    // this.id = id;
-    this.nome = nome;
-    this.email = email;
-    this.senha = senha;
-    this.conta  = contaEntity;
-  }
-
-
-
-
-
-
-
   @OneToMany(
-    // mappedBy = "usuario",
-     cascade = CascadeType.ALL)
+      mappedBy = "usuario"
+      ,cascade = {CascadeType.ALL}
+      // , fetch = FetchType.LAZY
+      )
   private List<LancamentoEntity> lancamentos;
 
   public UsuarioEntity() {
 
   }
 
+  public UsuarioEntity(Long id) {
+    this.id = id;
+  }
 
+  public UsuarioEntity(String nome, String email, 
+  String senha ) {
+    this.nome = nome;
+    this.email = email;
+    this.senha = senha;
+   }
+
+  public UsuarioEntity(String nome, String email, 
+  String senha, ContaEntity contaEntity) {
+    this.nome = nome;
+    this.email = email;
+    this.senha = senha;
+    this.conta = contaEntity;
+  }
 
   public Long getId() {
     return this.id;
@@ -111,11 +108,11 @@ public class UsuarioEntity implements Serializable {
     this.senha = senha;
   }
 
-  public List<LancamentoEntity> getIdusuario_idUsuario() {
-    return this.lancamentos;
+  public List<LancamentoEntity> getLancamento() {
+    return lancamentos;
   }
 
-  public void setIdusuario_idUsuario(List<LancamentoEntity> lancamentos) {
+  public void setLancamento(List<LancamentoEntity> lancamentos) {
     this.lancamentos = lancamentos;
   }
 

@@ -25,10 +25,6 @@ public class ContaEntity implements Serializable {
   @Size(max = 255)
   private String descricao;
  
-
-
-
-
   @OneToOne(
    mappedBy = "conta",  
    cascade = CascadeType.ALL, 
