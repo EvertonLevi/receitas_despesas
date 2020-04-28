@@ -52,10 +52,10 @@ public class Controller {
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
-    @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
-    public List<UsuarioEntity> Get() {
-        return usuarioRepository.findAll();
-    }
+    // @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
+    // public List<UsuarioEntity> Get() {
+    //     return usuarioRepository.findAll();
+    // }
 
     @PostMapping("/createUser")
     public String createUsuario(@Valid @RequestBody UsuarioEntity usuarioEntity, ContaEntity contaEntity) {
@@ -78,20 +78,14 @@ public class Controller {
 
     @PostMapping("/postLancamento/{usuario_id}")
     public String postLancamento(
-        @PathVariable(value = "usuario_id") Long usuario_id,
-     @Valid @RequestBody LancamentoEntity lancamentoEntity,
-            UsuarioEntity usuarioEntity) {
+        @PathVariable(value = "usuario_id") Long usuarioId,
+     @Valid @RequestBody LancamentoEntity lancamentoEntity ) {
         try {
-            usuarioEntity = new UsuarioEntity();
-            usuarioEntity.setId(usuario_id);
-            lancamentoEntity = new LancamentoEntity();
-            // usuarioEntity.getId(); 
-            usuarioRepository.save(usuarioEntity);
-            
-            lancamentoEntity.setUsuarioEntity(usuarioEntity);
+            Optional<UsuarioEntity> optional = usuarioRepository.findById(usuarioId);
+            UsuarioEntity usuarioEntity = optional.get();
+            // TODO a hora está settando com outro fuso
             // lancamentoEntity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
-            // lancamentoEntity.setDescricao(lancamentoEntity.getDescricao());
-            // lancamentoEntity.setValor(lancamentoEntity.getValor());
+            lancamentoEntity.setUsuarioEntity(usuarioEntity);
             lancamentoRepository.save(lancamentoEntity);
             return usuarioEntity.toString();
         } catch (

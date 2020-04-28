@@ -29,28 +29,20 @@ public class UsuarioEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @NotNull
   @Size(max = 30)
   private String nome;
 
-  @NotNull
   @NotBlank(message = "Por favor, insira um e-mail")
   @Size(max = 50)
   private String email;
 
-  @NotNull
   @Size(max = 50)
   private String senha;
 
-  // @JoinColumn(name = "conta_id", nullable = false)
   @OneToOne(fetch = FetchType.LAZY, optional = false)
   private ContaEntity conta;
 
-  @OneToMany(
-      mappedBy = "usuario",
-      cascade = {CascadeType.ALL}
-      , fetch = FetchType.LAZY
-      )
+  @OneToMany(mappedBy = "usuario", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
   private List<LancamentoEntity> lancamentos;
 
   public UsuarioEntity() {
@@ -61,15 +53,13 @@ public class UsuarioEntity implements Serializable {
     this.id = id;
   }
 
-  public UsuarioEntity(String nome, String email, 
-  String senha ) {
+  public UsuarioEntity(String nome, String email, String senha) {
     this.nome = nome;
     this.email = email;
     this.senha = senha;
-   }
+  }
 
-  public UsuarioEntity(String nome, String email, 
-  String senha, ContaEntity contaEntity) {
+  public UsuarioEntity(String nome, String email, String senha, ContaEntity contaEntity) {
     this.nome = nome;
     this.email = email;
     this.senha = senha;

@@ -14,12 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-// @JoinColumn(name = "usuario") no Usuario Entity
-
-// ManyToOne
-// https://thoughts-on-java.org/many-relationships-additional-properties/
-
-// @JsonIgnoreProperties({ "nome", "email", "senha", "conta_idConta", "lancamento" })
+ 
 @Entity
 @Table(name = "lancamento")
 public class LancamentoEntity implements Serializable {

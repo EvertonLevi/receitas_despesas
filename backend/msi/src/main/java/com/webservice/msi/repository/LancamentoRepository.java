@@ -12,7 +12,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LancamentoRepository extends JpaRepository<LancamentoEntity, Long> {
- // List<LancamentoEntity> findByUsuarioEntityId(Long usuarioId);
- // Optional<LancamentoEntity> findByIdAndUsuarioEntityId(Long id, Long
- // usuarioId);
+
 }
