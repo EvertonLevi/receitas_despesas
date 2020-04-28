@@ -74,21 +74,20 @@ public class Controller {
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {
         usuarioRepository.deleteById(id);
-    }
+    } 
 
-    // @PostMapping("/postLancamento/{id}")
-    // public String postLancamento(@Valid @RequestBody
-    // @PathVariable Long id,
-    // LancamentoEntity lancamentoEntity,
-    // UsuarioEntity usuarioEntity) {
-
-    @PostMapping("/postLancamento/{id}")
-    public String postLancamento(@PathVariable Long id, @Valid @RequestBody LancamentoEntity lancamentoEntity,
+    @PostMapping("/postLancamento/{usuario_id}")
+    public String postLancamento(
+        @PathVariable(value = "usuario_id") Long usuario_id,
+     @Valid @RequestBody LancamentoEntity lancamentoEntity,
             UsuarioEntity usuarioEntity) {
         try {
-            usuarioEntity.setId(id);
-            usuarioEntity.getId();
+            usuarioEntity = new UsuarioEntity();
+            usuarioEntity.setId(usuario_id);
+            lancamentoEntity = new LancamentoEntity();
+            // usuarioEntity.getId(); 
             usuarioRepository.save(usuarioEntity);
+            
             lancamentoEntity.setUsuarioEntity(usuarioEntity);
             // lancamentoEntity.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
             // lancamentoEntity.setDescricao(lancamentoEntity.getDescricao());

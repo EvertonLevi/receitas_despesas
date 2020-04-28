@@ -38,15 +38,16 @@ public class LancamentoEntity implements Serializable {
   @Column
   private Float valor;
 
-  @ManyToOne(cascade =  CascadeType.ALL)
-  @JoinColumn(name = "usuario", insertable = false, updatable = false)
+  // @JoinColumn(name = "usuario_id")
+  @ManyToOne( cascade =  CascadeType.ALL, optional = false)
   private UsuarioEntity usuario;
 
   public LancamentoEntity() {
 
   }
 
-  public LancamentoEntity(  UsuarioEntity usuario, 
+  public LancamentoEntity(  
+    UsuarioEntity usuario, 
   LocalDateTime data_de_lancamento, 
   String descricao, Float valor) { 
     this.usuario = usuario;
@@ -67,8 +68,7 @@ public class LancamentoEntity implements Serializable {
     this.usuario = ueId;
   }
 
-  // @JsonIgnoreProperties({ "nome", "email", "conta_idconta", "id" })
-
+ 
   public Long getId() {
     return this.id;
   }

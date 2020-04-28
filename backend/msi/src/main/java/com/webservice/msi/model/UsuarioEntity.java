@@ -47,9 +47,9 @@ public class UsuarioEntity implements Serializable {
   private ContaEntity conta;
 
   @OneToMany(
-      mappedBy = "usuario"
-      ,cascade = {CascadeType.ALL}
-      // , fetch = FetchType.LAZY
+      mappedBy = "usuario",
+      cascade = {CascadeType.ALL}
+      , fetch = FetchType.LAZY
       )
   private List<LancamentoEntity> lancamentos;
 

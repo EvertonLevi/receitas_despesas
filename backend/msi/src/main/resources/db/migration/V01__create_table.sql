@@ -49,7 +49,7 @@ CREATE TABLE usuario
     (255) NOT NULL,
   valor FLOAT NOT NULL,
   data_de_lancamento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  usuario BIGINT DEFAULT NULL,
+  usuario_id BIGINT DEFAULT NULL,
   PRIMARY KEY
     (id)  )ENGINE    =InnoDB DEFAULT CHARSET=utf8;
 
@@ -65,17 +65,3 @@ CREATE TABLE usuario
   PRIMARY KEY
       (id))
 ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
---       ALTER TABLE conta
---   ADD CONSTRAINT fk_conta_usuario
---     FOREIGN KEY (usuario)
---     REFERENCES msi.usuario (id)
---     ON DELETE NO ACTION
---     ON UPDATE NO ACTION,
--- ENGINE
---       =InnoDB DEFAULT CHARSET=utf8;
-
--- SET SQL_MODE=@OLD_SQL_MODE;
--- SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
--- SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
