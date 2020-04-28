@@ -31,10 +31,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.ResourceAccessException;
 
 import javassist.NotFoundException;
 
@@ -54,7 +56,7 @@ public class Controller {
 
     // @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
     // public List<UsuarioEntity> Get() {
-    //     return usuarioRepository.findAll();
+    // return usuarioRepository.findAll();
     // }
 
     @PostMapping("/createUser")
@@ -74,12 +76,11 @@ public class Controller {
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {
         usuarioRepository.deleteById(id);
-    } 
+    }
 
     @PostMapping("/postLancamento/{usuario_id}")
-    public String postLancamento(
-        @PathVariable(value = "usuario_id") Long usuarioId,
-     @Valid @RequestBody LancamentoEntity lancamentoEntity ) {
+    public String postLancamento(@PathVariable(value = "usuario_id") Long usuarioId,
+            @Valid @RequestBody LancamentoEntity lancamentoEntity) {
         try {
             Optional<UsuarioEntity> optional = usuarioRepository.findById(usuarioId);
             UsuarioEntity usuarioEntity = optional.get();
@@ -93,6 +94,34 @@ public class Controller {
         Exception e) {
             return "Erro no método postLancamento(): " + e.getMessage();
         }
+    }
+
+    @PutMapping("/putLancamento/{id}")
+    public String putLancamento(
+        @PathVariable(value = "id") Long lancamentoId,
+            @Valid @RequestBody LancamentoEntity lancamentoEntity
+            ) {
+        try {
+            // Optional<UsuarioEntity> optional = usuarioRepository.findById(id);
+            // UsuarioEntity usuarioEntity = optional.get();
+        
+            LancamentoEntity lancamento = lancamentoRepository.findById(lancamentoId)
+            .orElseThrow(() -> new ResourceAccessException("Id não encontrado " + lancamentoId));
+
+            lancamento.setId(lancamentoEntity.getId());
+            lancamento.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
+            lancamento.setDescricao(lancamentoEntity.getDescricao());
+            lancamento.setValor(lancamentoEntity.getValor());
+            lancamento.setUsuarioEntity(lancamento.getUsuarioEntity());
+            
+            lancamentoRepository.save(lancamento);            
+            
+            // lancamentoRepository.save(lancamentoEntity);
+            return lancamentoEntity.toString();
+        } catch (Exception e) {
+            return "Erro no método putLancamento(): " + e.getMessage();
+        }
+
     }
 
     @DeleteMapping("/deleteLancamento/{id}")
