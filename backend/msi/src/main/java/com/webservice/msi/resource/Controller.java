@@ -102,21 +102,15 @@ public class Controller {
             @Valid @RequestBody LancamentoEntity lancamentoEntity
             ) {
         try {
-            // Optional<UsuarioEntity> optional = usuarioRepository.findById(id);
-            // UsuarioEntity usuarioEntity = optional.get();
-        
             LancamentoEntity lancamento = lancamentoRepository.findById(lancamentoId)
             .orElseThrow(() -> new ResourceAccessException("Id não encontrado " + lancamentoId));
 
-            lancamento.setId(lancamentoEntity.getId());
             lancamento.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
             lancamento.setDescricao(lancamentoEntity.getDescricao());
             lancamento.setValor(lancamentoEntity.getValor());
             lancamento.setUsuarioEntity(lancamento.getUsuarioEntity());
             
-            lancamentoRepository.save(lancamento);            
-            
-            // lancamentoRepository.save(lancamentoEntity);
+            lancamentoRepository.save(lancamento);   
             return lancamentoEntity.toString();
         } catch (Exception e) {
             return "Erro no método putLancamento(): " + e.getMessage();
