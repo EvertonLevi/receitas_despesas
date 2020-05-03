@@ -11,12 +11,14 @@ export default function Logon() {
   const [nome, setNome] = useState("")
   const [email, setEmail] = useState("")
   const [senha, setSenha] = useState("")
- 
+
   return (
     <div className="logon_container">
       <section className="form">
         {/* TODO ta errado, isso é no Cadastro o createUser */}
-        <form onSubmit={createUser}        >
+        <form
+          // onSubmit={}
+        >
           <h1>Faça seu login</h1>
           <input placeholder='Seu email...'
           // value={email}

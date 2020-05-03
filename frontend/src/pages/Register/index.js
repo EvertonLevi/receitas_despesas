@@ -15,19 +15,35 @@ export default function Register() {
 
  async function createUser(e) {
   e.preventDefault()
-  alert(e.nome)
-  axios.post("http://localhost:8080/createUser", {
+  const data = {
+   nome, email, senha
+  }
+  alert(data.nome)
+
+  try {
+   await axios.post("http://localhost:8080/createUser", {
    nome: nome,
    email: email,
    senha: senha,
-  })
-   .then(function (response) {
-    alert(nome + " " + email)
-    history.push("/")//de volta p home
    })
-   .catch(function (error) {
-    alert(error)
-   })
+   alert(data.nome + " | " + data.email)
+   history.push("/")//de volta p home
+  } catch (error) {
+   alert(error)
+  }
+
+  // axios.post("http://localhost:8080/createUser", {
+  //  nome: nome,
+  //  email: email,
+  //  senha: senha,
+  // })
+  //  .then(function (response) {
+  //   alert(nome + " " + email)
+  //   history.push("/")//de volta p home
+  //  })
+  //  .catch(function (error) {
+  //   alert(error)
+  //  })
 
  }
 
@@ -62,7 +78,8 @@ export default function Register() {
       value={senha}
       onChange={e => setSenha(e.target.value)}
      />
-     <button className="button" type="submit">Cadastrar</button>
+     <button className="button"
+      type="submit">Cadastrar</button>
     </form>
 
    </div>

@@ -9,4 +9,6 @@ public class MsiApplication {
     public static void main(final String[] args) {
         SpringApplication.run(MsiApplication.class, args);
     }
+
+ 
 }

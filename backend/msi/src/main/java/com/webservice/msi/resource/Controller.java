@@ -1,47 +1,30 @@
 package com.webservice.msi.resource;
 
-import java.io.Console;
-import java.util.List;
 import java.util.Optional;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 
 import com.webservice.msi.repository.ContaRepository;
 import com.webservice.msi.repository.LancamentoRepository;
 import com.webservice.msi.repository.UsuarioRepository;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import com.webservice.msi.model.ContaEntity;
 import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
-import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.ResourceAccessException;
 
-import javassist.NotFoundException;
-
 // @CrossOrigin quando for usar o front
-// @CrossOrigin(origins = "*", allowCredentials = "*")
+@CrossOrigin(origins = "*", allowCredentials = "")
 @RestController
 public class Controller {
 
@@ -73,6 +56,20 @@ public class Controller {
         }
     }
 
+
+    @GetMapping("/getUser")
+    public String getUsuario(@Valid @RequestBody 
+    UsuarioEntity usuarioEntity
+    ){ 
+    try {
+        
+        return "Usuário encontrato";
+    } catch (Exception e) {
+        return "Usuário não encontrato!";
+    }
+    
+    }
+
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {
         usuarioRepository.deleteById(id);
@@ -97,20 +94,18 @@ public class Controller {
     }
 
     @PutMapping("/putLancamento/{id}")
-    public String putLancamento(
-        @PathVariable(value = "id") Long lancamentoId,
-            @Valid @RequestBody LancamentoEntity lancamentoEntity
-            ) {
+    public String putLancamento(@PathVariable(value = "id") Long lancamentoId,
+            @Valid @RequestBody LancamentoEntity lancamentoEntity) {
         try {
             LancamentoEntity lancamento = lancamentoRepository.findById(lancamentoId)
-            .orElseThrow(() -> new ResourceAccessException("Id não encontrado " + lancamentoId));
+                    .orElseThrow(() -> new ResourceAccessException("Id não encontrado " + lancamentoId));
 
             lancamento.setData_de_lancamento(lancamentoEntity.getData_de_lancamento().now());
             lancamento.setDescricao(lancamentoEntity.getDescricao());
             lancamento.setValor(lancamentoEntity.getValor());
             lancamento.setUsuarioEntity(lancamento.getUsuarioEntity());
-            
-            lancamentoRepository.save(lancamento);   
+
+            lancamentoRepository.save(lancamento);
             return lancamentoEntity.toString();
         } catch (Exception e) {
             return "Erro no método putLancamento(): " + e.getMessage();
