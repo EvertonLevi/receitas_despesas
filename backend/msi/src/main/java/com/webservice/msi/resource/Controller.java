@@ -3,6 +3,7 @@ package com.webservice.msi.resource;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import com.webservice.msi.repository.ContaRepository;
 import com.webservice.msi.repository.LancamentoRepository;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.ResourceAccessException;
+
+import antlr.collections.List;
 
 // @CrossOrigin quando for usar o front
 @CrossOrigin(origins = "*", allowCredentials = "")
@@ -56,18 +59,9 @@ public class Controller {
         }
     }
 
-
     @GetMapping("/getUser")
-    public String getUsuario(@Valid @RequestBody 
-    UsuarioEntity usuarioEntity
-    ){ 
-    try {
-        
-        return "Usuário encontrato";
-    } catch (Exception e) {
-        return "Usuário não encontrato!";
-    }
-    
+    public AuthenticationBean getUsuario() {
+        return new AuthenticationBean("Você foi autenticado!");
     }
 
     @DeleteMapping("/deleteUser/{id}")
