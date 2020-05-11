@@ -10,5 +10,4 @@ public class MsiApplication {
         SpringApplication.run(MsiApplication.class, args);
     }
 
- 
 }

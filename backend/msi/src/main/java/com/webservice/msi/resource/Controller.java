@@ -1,7 +1,10 @@
 package com.webservice.msi.resource;
 
 import java.util.Optional;
+import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
@@ -14,6 +17,10 @@ import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +31,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.ResourceAccessException;
 
-import antlr.collections.List;
-
-// @CrossOrigin quando for usar o front
 @CrossOrigin(origins = "*", allowCredentials = "")
 @RestController
 public class Controller {
@@ -60,9 +64,10 @@ public class Controller {
     }
 
     @GetMapping("/getUser")
-    public AuthenticationBean getUsuario() {
-        return new AuthenticationBean("Você foi autenticado!");
+    public ResponseEntity<List<UsuarioEntity>> getUsuario() {
+        return new ResponseEntity<List<UsuarioEntity>>(usuarioRepository.findAll(), HttpStatus.OK);
     }
+
 
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {
@@ -129,11 +134,6 @@ public class Controller {
     @GetMapping
     public String Controller() {
         return "Hello World";
-    }
-
-    @GetMapping("/createUser")
-    public String dsda() {
-        return "Create";
     }
 
 }

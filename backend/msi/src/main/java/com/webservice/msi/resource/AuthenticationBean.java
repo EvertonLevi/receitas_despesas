@@ -1,5 +1,6 @@
 package com.webservice.msi.resource;
 
+
 public class AuthenticationBean {
 
  private String message;
