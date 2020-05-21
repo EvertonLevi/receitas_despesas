@@ -3,8 +3,7 @@ package com.webservice.msi.resource;
 import java.util.Optional;
 import java.util.List;
 
-import javax.validation.Valid;
-import javax.websocket.server.PathParam;
+import javax.validation.Valid; 
 
 import com.webservice.msi.repository.ContaRepository;
 import com.webservice.msi.repository.LancamentoRepository;
@@ -59,10 +58,23 @@ public class Controller {
         }
     }
 
+    // FOR AUTH METHOD
     @GetMapping("/getUser")
     public ResponseEntity<List<UsuarioEntity>> getUsuario() {
         return new ResponseEntity<List<UsuarioEntity>>(usuarioRepository.findAll(), HttpStatus.OK);
     }
+    
+    
+    public ResponseEntity<List<UsuarioEntity>> getUsuarios(
+    Long id
+    ){
+        // return new ResponseEntity<UsuarioEntity>(usuarioRepository.findById(id)  HttpStatus.OK);
+        return getUsuario();
+    }
+    
+    
+    
+    // FINISH FOR AUTH METHOD
 
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {
