@@ -1,29 +1,28 @@
 package com.webservice.msi.model;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.util.Collection;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.List;
 
 @Entity
 @Table(name = "usuario")
-public class UsuarioEntity implements Serializable {
+public class UsuarioEntity implements Serializable, UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -117,6 +116,48 @@ public class UsuarioEntity implements Serializable {
   public String toString() {
     return "{" + " id='" + getId() + "'" + ", name='" + getNome() + "'" + ", lastName='" + getSenha() + "'"
         + ", email='" + getEmail() + "'" + ", conta ='" + getIdContaUsuario() + "'" + "}";
+  }
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public String getPassword() {
+    // TODO Auto-generated method stub
+    return this.senha;
+  }
+
+  @Override
+  public String getUsername() {
+    // TODO Auto-generated method stub
+    return this.nome;
+  }
+
+  @Override
+  public boolean isAccountNonExpired() {
+    // TODO Auto-generated method stub
+    return true;
+  }
+
+  @Override
+  public boolean isAccountNonLocked() {
+    // TODO Auto-generated method stub
+    return true;
+  }
+
+  @Override
+  public boolean isCredentialsNonExpired() {
+    // TODO Auto-generated method stub
+    return true;
+  }
+
+  @Override
+  public boolean isEnabled() {
+    // TODO Auto-generated method stub
+    return true;
   }
 
 }
