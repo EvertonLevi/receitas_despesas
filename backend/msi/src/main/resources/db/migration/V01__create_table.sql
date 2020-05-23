@@ -32,7 +32,7 @@ CREATE TABLE usuario
   email VARCHAR
   (50) NOT NULL,
   senha VARCHAR
-  (50) NOT NULL,
+  (255) NOT NULL,
   conta_id BIGINT,
   PRIMARY KEY
   (id) 

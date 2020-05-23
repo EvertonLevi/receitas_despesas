@@ -3,7 +3,8 @@ package com.webservice.msi.resource;
 import java.util.Optional;
 import java.util.List;
 
-import javax.validation.Valid; 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import com.webservice.msi.repository.ContaRepository;
 import com.webservice.msi.repository.LancamentoRepository;
@@ -14,6 +15,7 @@ import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.ResourceAccessException;
@@ -58,23 +61,16 @@ public class Controller {
         }
     }
 
-    // FOR AUTH METHOD
     @GetMapping("/getUser")
     public ResponseEntity<List<UsuarioEntity>> getUsuario() {
         return new ResponseEntity<List<UsuarioEntity>>(usuarioRepository.findAll(), HttpStatus.OK);
     }
-    
-    
-    public ResponseEntity<List<UsuarioEntity>> getUsuarios(
-    Long id
-    ){
-        // return new ResponseEntity<UsuarioEntity>(usuarioRepository.findById(id)  HttpStatus.OK);
+
+    public ResponseEntity<List<UsuarioEntity>> getUsuarios(Long id) {
+        // return new ResponseEntity<UsuarioEntity>(usuarioRepository.findById(id)
+        // HttpStatus.OK);
         return getUsuario();
     }
-    
-    
-    
-    // FINISH FOR AUTH METHOD
 
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {
@@ -130,7 +126,6 @@ public class Controller {
         try {
             // entity.setDescricao(lancamentoEntity.getDescricao());
             // entity.setValor(lancamentoEntity.getValor());
-
             // lancamentoRepository.save(entity);
             return entity.toString();
         } catch (Exception e) {
@@ -138,9 +133,11 @@ public class Controller {
         }
     }
 
-    @GetMapping
-    public String Controller() {
-        return "Hello World";
+    @RequestMapping("/")
+    public ResponseEntity Index(HttpServletResponse response) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "http://localhost:3000/");
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
 }

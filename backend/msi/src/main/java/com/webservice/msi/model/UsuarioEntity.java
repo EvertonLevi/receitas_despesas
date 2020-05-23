@@ -6,6 +6,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -13,6 +16,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import java.util.Collection;
+import java.util.Collections;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,6 +48,15 @@ public class UsuarioEntity implements Serializable, UserDetails {
 
   @OneToMany(mappedBy = "usuario", cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
   private List<LancamentoEntity> lancamentos;
+
+  // @ManyToMany
+  // @JoinTable(
+  // name = "usuarios_roles",
+  // joinColumns = @JoinColumn(
+  // name = "id", referencedColumnName = "email"),
+  // inverseJoinColumns = @JoinColumn(
+  // name = "id", referencedColumnName = "nomeRole"))
+  // private List<Role> roles;
 
   public UsuarioEntity() {
 
@@ -80,6 +94,14 @@ public class UsuarioEntity implements Serializable, UserDetails {
   public void setNome(String nome) {
     this.nome = nome;
   }
+
+  // public List<Role> getRole() {
+  // return roles;
+  // }
+
+  // public void setRole(List<Role> roles) {
+  // this.roles = roles;
+  // }
 
   public String getEmail() {
     return this.email;
@@ -120,22 +142,21 @@ public class UsuarioEntity implements Serializable, UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    // TODO Auto-generated method stub
-    return null;
+    return Collections.emptyList();
   }
 
   @Override
   public String getPassword() {
-    // TODO Auto-generated method stub
     return this.senha;
   }
 
   @Override
   public String getUsername() {
-    // TODO Auto-generated method stub
-    return this.nome;
+    // this.email por meu front validar por email
+    return this.email;
   }
 
+  // TODO métodos de conta expirada, bloqueado etc...
   @Override
   public boolean isAccountNonExpired() {
     // TODO Auto-generated method stub

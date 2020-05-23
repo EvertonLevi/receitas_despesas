@@ -20,17 +20,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
+    // TODO configurar o csrf() 
     http.csrf().disable().authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll().anyRequest().authenticated()
-        .and().formLogin().permitAll().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+        .and().formLogin().permitAll().and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")); 
   }
 
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-
-    // inMemoryAuthentication().withUser("levi").password("123").roles("ADMIN"); =>
-    // test com autenticaçâo em memória
+    auth.userDetailsService(userDetailsService)
+    .passwordEncoder(new BCryptPasswordEncoder());
   }
+  // inMemoryAuthentication().withUser("levi").password("123").roles("ADMIN"); =>
+  // test com autenticaçâo em memória
 
   @Override
   public void configure(WebSecurity web) throws Exception {
