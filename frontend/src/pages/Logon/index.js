@@ -14,32 +14,45 @@ export default function Logon() {
   const [senha, setSenha] = useState("")
   const history = useHistory()
 
+  const endpoint = "http://localhost:8080/authenticate"
+  const endpointTest = "http://localhost:8080/testAuth"
+  const proxyurl = "http://localhost:8080/";
+
   async function login(e) {
     e.preventDefault()
-    const data = {
-      nome, email, senha
+
+    const dataAuth = {
+      password: setSenha(senha),
+      userEmail: setEmail(email)
     }
 
     const token = Buffer.from(`${email}:${senha}`, 'utf-8').toString('base64')
-
     try {
-      let response = await axios.post("http://localhost:8080/getUser",
-        {
-          headers: {
-            // 'Authorization': 'Basic ' + btoa(email + ':' + senha),
-            'Authorization': `Basic ${token}`
-          }
-        }, {
-        auth: {
-          email: email,
-          senha: senha
+      await axios.post(endpoint, dataAuth, {
+        headers: {
+          'Authorization': 'Basic ' + btoa(email + ':' + senha),
+          // 'Authorization': `Basic ${token}`
         }
       })
-      console.log(response)
-      // history.push("/")
+        .then(res => {
+          localStorage.setItem("authorization", res.data.token)
+          history.push("/")
+          return loginOK
+        })
     } catch (error) {
       alert(error)
     }
+  }
+
+  async function loginOK() {
+    axios.get(endpoint).then(res => {
+      if (res.data === "success") {
+        alert("Autenticação OOOOOOOOOOKKKKKKKKK")
+        // this.props.history.push("/dashboard");
+      } else {
+        alert("Autenticação falhou!!!!!!!!!!!");
+      }
+    });
   }
 
   return (
@@ -55,6 +68,7 @@ export default function Logon() {
             onChange={e => setEmail(e.target.value)}
           />
           <input placeholder='Sua senha...'
+            type="password"
             value={senha}
             onChange={e => setSenha(e.target.value)}
           />

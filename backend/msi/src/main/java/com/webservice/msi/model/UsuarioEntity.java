@@ -6,9 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -19,12 +16,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.util.List;
 
+// UserDetails
 @Entity
 @Table(name = "usuario")
 public class UsuarioEntity implements Serializable, UserDetails {

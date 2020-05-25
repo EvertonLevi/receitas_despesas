@@ -15,7 +15,6 @@ import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.ResourceAccessException;
 
-@CrossOrigin(origins = "*", allowCredentials = "")
+@CrossOrigin(origins = "*", allowCredentials = "", allowedHeaders = "*")
 @RestController
 public class Controller {
 
@@ -57,14 +56,14 @@ public class Controller {
 
             return usuarioEntity.toString();
         } catch (Exception e) {
-            return "Erro no CreateUser: " + e.getMessage();
+            return "Erro no CreateUser: " + e.getMessage(); 
         }
     }
 
-    @GetMapping("/getUser")
+    @GetMapping("/authenticate")
     public ResponseEntity<List<UsuarioEntity>> getUsuario() {
         return new ResponseEntity<List<UsuarioEntity>>(usuarioRepository.findAll(), HttpStatus.OK);
-    }
+    } 
 
     public ResponseEntity<List<UsuarioEntity>> getUsuarios(Long id) {
         // return new ResponseEntity<UsuarioEntity>(usuarioRepository.findById(id)
@@ -134,10 +133,27 @@ public class Controller {
     }
 
     @RequestMapping("/")
-    public ResponseEntity Index(HttpServletResponse response) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "http://localhost:3000/");
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    public String index() {
+        return "Hello World";
     }
 
+    @GetMapping("/testAuth")
+    public String TesteAuth() {
+        return "Hello World, o teste auth PASSOU";
+    }
+
+    // @RequestMapping("/")
+    // public ResponseEntity Index(HttpServletResponse response) {
+    // HttpHeaders headers = new HttpHeaders();
+    // headers.add("Location", "http://localhost:3000/");
+    // return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    // }
+    // TODO LOGIN POR REQUEST
+
+    // gerar token no signin (front)
+    // Login POST (user, senha)
+    // findByUser
+    // if senha == user.senha do banco
+    // return token
+    // token no localstorage
 }
