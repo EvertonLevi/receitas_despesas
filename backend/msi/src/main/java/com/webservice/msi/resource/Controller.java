@@ -3,20 +3,32 @@ package com.webservice.msi.resource;
 import java.util.Optional;
 import java.util.List;
 
+import javax.naming.AuthenticationException;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.webservice.msi.repository.ContaRepository;
 import com.webservice.msi.repository.LancamentoRepository;
 import com.webservice.msi.repository.UsuarioRepository;
-
+import com.webservice.msi.service.JwtUserDetailsService;
+import com.webservice.msi.config.JwtTokenUtil;
 import com.webservice.msi.model.ContaEntity;
+import com.webservice.msi.model.JwtRequest;
+import com.webservice.msi.model.JwtResponse;
 import com.webservice.msi.model.LancamentoEntity;
 import com.webservice.msi.model.UsuarioEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,11 +36,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.client.ResourceAccessException;
 
-@CrossOrigin(origins = "*", allowCredentials = "", allowedHeaders = "*")
+// @CrossOrigin(origins = "*", allowCredentials = "", allowedHeaders = "*")
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:4200" })
 @RestController
 public class Controller {
 
@@ -41,10 +55,14 @@ public class Controller {
     @Autowired
     private LancamentoRepository lancamentoRepository;
 
-    // @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
-    // public List<UsuarioEntity> Get() {
-    // return usuarioRepository.findAll();
-    // }
+    @Autowired(required = true)
+    private AuthenticationManager authenticationManager;
+
+    @Autowired(required = true)
+    private JwtTokenUtil jwtTokenUtil;
+
+    @Autowired(required = true)
+    private JwtUserDetailsService userDetailsService;
 
     @PostMapping("/createUser")
     public String createUsuario(@Valid @RequestBody UsuarioEntity usuarioEntity, ContaEntity contaEntity) {
@@ -56,20 +74,33 @@ public class Controller {
 
             return usuarioEntity.toString();
         } catch (Exception e) {
-            return "Erro no CreateUser: " + e.getMessage(); 
+            return "Erro no CreateUser: " + e.getMessage();
         }
     }
 
-    @GetMapping("/authenticate")
-    public ResponseEntity<List<UsuarioEntity>> getUsuario() {
-        return new ResponseEntity<List<UsuarioEntity>>(usuarioRepository.findAll(), HttpStatus.OK);
-    } 
-
-    public ResponseEntity<List<UsuarioEntity>> getUsuarios(Long id) {
-        // return new ResponseEntity<UsuarioEntity>(usuarioRepository.findById(id)
-        // HttpStatus.OK);
-        return getUsuario();
+    @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = jwtTokenUtil.generateToken(userDetails);
+        return ResponseEntity.ok(new JwtResponse(token));
     }
+
+    private void authenticate(String username, String password) throws Exception {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USUÁRIO DESABILITADO", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("CREDENCIAIS INVÁLIDAS", e);
+        }
+    }
+
+    // @GetMapping("/authenticate")
+    // public ResponseEntity<List<UsuarioEntity>> createAuthenticationToken() {
+    // return new ResponseEntity<List<UsuarioEntity>>(usuarioRepository.findAll(),
+    // HttpStatus.OK);
+    // }
 
     @DeleteMapping("/deleteUser/{id}")
     public void deleteUser(@PathVariable Long id) {

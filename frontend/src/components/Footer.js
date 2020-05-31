@@ -4,10 +4,14 @@ import { FiLogIn } from 'react-icons/fi'
 import axios from 'axios'
 import './styles.css'
 
-export default function NovoLancamento() {
+import Auth from '../../auth'
+
+
+export default function Footer(props) {
+
  return (
-  <div className="logon_container">
-   <h1>Novo Lancamento</h1>
+  <div className="header-container">
+   <h1>FOOTER CONTAINER</h1>
   </div>
  )
 }

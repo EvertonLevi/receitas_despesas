@@ -3,6 +3,7 @@ package com.webservice.msi.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,12 +25,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private ImplementsUserDetailsService userDetailsService;
 
+  // public AuthToken 
+
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     // TODO configurar o csrf()
-    http.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.GET, "/").permitAll().anyRequest()
+    http.cors().and().csrf().disable().authorizeRequests().antMatchers(HttpMethod.GET, "/**").permitAll().anyRequest()
         .authenticated().and().formLogin().permitAll().and().logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+
+    // http.addFilterBefore(auten, beforeFilter)
   }
 
   @Override
@@ -39,7 +44,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(WebSecurity web) throws Exception {
-    web.ignoring().antMatchers("/resources/**", "/static/**");
+    web.ignoring().antMatchers(HttpMethod.OPTIONS, "/**");
+    // web.ignoring().antMatchers("/resources/**", "/static/**");
   }
-
 }
